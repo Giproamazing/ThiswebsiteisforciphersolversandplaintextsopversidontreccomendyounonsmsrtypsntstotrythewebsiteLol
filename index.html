@@ -3,205 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Input</title>
+    <title>Secret Input Box</title>
     <style>
         body {
             background-color: black;
-            color: white;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
-            transition: background-color 0.5s ease;
+            color: white;
         }
-
-        body.green-glow {
-            box-shadow: 0 0 20px 10px green inset;
-        }
-
         .container {
             text-align: center;
         }
-
-        input[type="text"] {
+        .input-box {
             background-color: black;
             border: 2px solid white;
-            border-radius: 5px;
             color: white;
             padding: 10px;
-            width: 300px;
+            font-size: 18px;
             outline: none;
-            text-align: center;
             box-shadow: 0 0 10px white;
+            width: 300px;
+            margin-bottom: 10px;
         }
-
-        #enterButton {
+        .enter-box {
             background-color: black;
             border: 2px solid white;
             color: white;
-            padding: 10px 20px;
-            margin-top: 10px;
-            cursor: pointer;
+            padding: 10px;
+            font-size: 18px;
+            outline: none;
             box-shadow: 0 0 10px white;
-            transition: background-color 0.3s ease;
+            cursor: pointer;
         }
-
-        #enterButton:hover {
-            background-color: white;
-            color: black;
+        .message {
+            color: white;
+            font-size: 18px;
+            margin-top: 10px;
         }
-
-        #message {
-            margin-top: 20px;
-            font-size: 20px;
+        .fade {
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 1s ease;
         }
-
-        .red-bg {
-            background-color: red;
+        .fade.visible {
+            opacity: 1;
         }
-
-        .green-bg {
-            background-color: green;
-        }
-
-        .glow-text {
-            color: yellow;
-            text-shadow: 0 0 10px yellow, 0 0 5px white;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #countdownContainer {
-            margin-top: 50px;
-            font-size: 25px;
-            text-align: center;
-        }
-
-        #timeBeforeShutdown {
-            margin-bottom: 10px;
-            font-size: 30px;
+        .red-glow {
             color: red;
+            text-shadow: 0 0 10px red;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+        }
+        .click-here {
+            color: white;
+            text-decoration: underline;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <input type="text" id="inputBox" placeholder="What shall you tell me?" autocomplete="off">
-        <button id="enterButton">Enter</button>
-        <p id="message"></p>
+        <input type="text" class="input-box" id="inputBox" placeholder="What will you tell me?">
+        <button class="enter-box" onclick="checkInput()">Enter</button>
+        <div class="message" id="message"></div>
     </div>
 
-    <div id="countdownContainer">
-        <p id="timeBeforeShutdown">TIME BEFORE SHUTDOWN</p>
-        <p id="countdown"></p>
+    <!-- Fake content -->
+    <div style="display:none;">
+        <!-- 70 fake input codes and answers at the beginning -->
+        <p>Fake Code 1: abc123</p>
+        <p>Fake Code 2: def456</p>
+        <p>Fake Code 3: ghi789</p>
+        <!-- Add 67 more fake codes here -->
+        <p>Fake Code 70: xyz000</p>
+
+        <!-- Hidden content with your provided text -->
+        <p>SOGXXHPAXYOXPGAZGOAXXA"-PXYXLXYXAPX"+YPXAXYPCHACYAXHPAXGLWXHPXAHPXSHXALXLHWXGLAXLGAHAXCAPYUCPACYPSXYPAXOYAXYOXAOGYXOAXPYAXYPWXYLWXYLZSYPZLGSXLHAXHLAXLHAYXAXYPAXLYAXYAXPGAXYOSJZKJSJDJSKSKJXJDKSKZJBDJSKZKJDJDJSKSHPHCOACHOGAOYXAOGXAOGGXAGXOSGXOXSGOXGOSZSOGSXGOSXOYOSXGOXSGOXSOYSXYPAXOYSXOXOGSOXOGXSGGOSXSYXGOAXGOAXOGAXPHSXHPSXPHAXPHSXOSHXSOHSLPSHCPSOYCCOHSCGOSSJSJSGIXGOSXXGOACHOSXYOSXGOSGOXSOHCSOGXGXOSXGPSGOXSGXOCSHHPSHCPSPHXSPPHCSCPHPHSC</p>
+        <!-- Repeat the text 14 more times -->
+        <p>SOGXXHPAXYOXPGAZGOAXXA"-PXYXLXYXAPX"+YPXAXYPCHACYAXHPAXGLWXHPXAHPXSHXALXLHWXGLAXLGAHAXCAPYUCPACYPSXYPAXOYAXYOXAOGYXOAXPYAXYPWXYLWXYLZSYPZLGSXLHAXHLAXLHAYXAXYPAXLYAXYAXPGAXYOSJZKJSJDJSKSKJXJDKSKZJBDJSKZKJDJDJSKSHPHCOACHOGAOYXAOGXAOGGXAGXOSGXOXSGOXGOSZSOGSXGOSXOYOSXGOXSGOXSOYSXYPAXOYSXOXOGSOXOGXSGGOSXSYXGOAXGOAXOGAXPHSXHPSXPHAXPHSXOSHXSOHSLPSHCPSOYCCOHSCGOSSJSJSGIXGOSXXGOACHOSXYOSXGOSGOXSOHCSOGXGXOSXGPSGOXSGXOCSHHPSHCPSPHXSPPHCSCPHPHSC</p>
+        <!-- Add 13 more similar lines -->
+
+        <!-- 70 fake input codes and answers at the end -->
+        <p>Fake Answer 1: qwerty123</p>
+        <p>Fake Answer 2: asdf456</p>
+        <p>Fake Answer 3: zxcv789</p>
+        <!-- Add 67 more fake answers here -->
+        <p>Fake Answer 70: poiu098</p>
     </div>
+
+    <div class="red-glow">Time is ticking, check fast</div>
 
     <script>
-        const correctCode = "Sub-jet-web-7--0";
-        const inputBox = document.getElementById('inputBox');
-        const enterButton = document.getElementById('enterButton');
-        const message = document.getElementById('message');
+        const correctAnswer = "/#)£(£)£)lavendeWeb";
+        const messageDiv = document.getElementById('message');
+        let doorClickCount = 0; // Counter for 'Door' clicks
 
-        const countdownElement = document.getElementById('countdown');
-        const responses = [
-            { code: "Assher", message: "Your not funny", bg: "green" },
-            { code: "Jafri", message: "Smarty technology man", bg: "green" },
-            { code: "jef", message: "Smarty technology man", bg: "green" },
-            { code: "Yusuf", message: "Good at politics but not good at smart things", bg: "green" },
-            { code: "Abhishek", message: "Who?", bg: "green" },
-            { code: "hizrin", message: "Who?", bg: "green" },
-            { code: "shy", message: "There are more problems than you see with your eyes", bg: "green" },
-            { code: "introvert", message: "There are more problems than you see with your eyes", bg: "green" },
-            { code: "crybaby", message: "There are more problems than you see with your eyes", bg: "green" },
-            { code: "cry baby", message: "There are more problems than you see with your eyes", bg: "green" },
-            { code: "crying kid", message: "There are more problems than you see with your eyes", bg: "green" },
-            { code: "Obed", message: "You will now forget them", bg: "green", countdown: true },
-            { code: "Saad", message: "You will now forget them", bg: "green", countdown: true },
-            { code: "adal", message: "You will now forget them", bg: "green", countdown: true },
-            { code: "Raphael", message: "You will now forget them", bg: "green", countdown: true },
-            { code: "temeris", message: "Wow you hate him too!", bg: "green" },
-            { code: "North Korea", message: "Nah", bg: "green" },
-            { code: "GitHub", message: "The founder of life", bg: "green" },
-            { code: "Willam", message: "How..how.. just forget about him he is not useful", bg: "green" },
-            { code: "Aasher", message: "Probably a idiot.", bg: "green" },
-            { code: "scaredy cat", message: "Haunted House", bg: "green" },
-            { code: "tell me", message: "What?", bg: "green" },
-            { code: "say the answer", message: "Nah", bg: "green" },
-            { code: "fuck you", message: "I..well..i..wish terrible things happen to you", bg: "green" },
-            { code: "fuck", message: "What did you expect?", bg: "green" },
-            { code: "shit", message: "What did you expect?", bg: "green" },
-            { code: "nigga", message: "What did you expect?", bg: "green" },
-            { code: "penis", message: "What did you expect?", bg: "green" },
-            { code: "cock", message: "What did you expect?", bg: "green" },
-            { code: "dumbo", message: "What did you expect?", bg: "green" },
-            { code: "1970", message: "Nah just be silent or I will make you", bg: "green" },
-            { code: "I wanna leave", message: "Well I never stopped you go ahead", bg: "green" },
-            { code: "dead bo**", message: "Huh? Willam?", bg: "green" },
-        ];
+        function checkInput() {
+            const userInput = document.getElementById('inputBox').value.trim();
+            let message = '';
 
-        const countdownKey = "countdownEndTime";
-        const twelveDaysInMillis = 12 * 24 * 60 * 60 * 1000;
-
-        function startCountdown() {
-            let endTime = localStorage.getItem(countdownKey);
-
-            if (!endTime) {
-                endTime = new Date().getTime() + twelveDaysInMillis;
-                localStorage.setItem(countdownKey, endTime);
-            }
-
-            const countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = endTime - now;
-
-                if (distance < 0) {
-                    clearInterval(countdownInterval);
-                    countdownElement.innerText = "SHUTDOWN INITIATED";
-                    return;
+            if (userInput === 'tell me a chipher') {
+                message = 'Okay here you go\n\nA uzwucwv lzw hsyw a owfl lg usdeau owtkalw sfv A lgdv ew wnwjqlzafy!';
+            } else if (userInput === 'GitHub') {
+                message = 'The website maker\nCool dude';
+            } else if (userInput === 'Yusuf') {
+                message = 'Go to MyBestie-(?????)';
+            } else if (userInput === 'alala') {
+                message = 'Cityi';
+            } else if (userInput === 'Aasher') {
+                message = 'Nah your not funny dude';
+            } else if (userInput === 'Door') {
+                doorClickCount++;
+                if (doorClickCount >= 70) {
+                    message = 'Here you go! Go to <span class="click-here" onclick="window.location.href=\'https://www.example.com\'">CLICK HERE</span>';
+                } else {
+                    message = `Door clicked ${doorClickCount} times`;
                 }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                countdownElement.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-            }, 1000);
-        }
-
-        enterButton.addEventListener('click', function() {
-            const input = inputBox.value.trim();
-            const matchedResponse = responses.find(response => response.code.toLowerCase() === input.toLowerCase());
-
-            if (matchedResponse) {
-                displayMessage(matchedResponse.message, matchedResponse.bg, matchedResponse.countdown);
-            } else if (input === correctCode) {
-                displayMessage("#++/(met)we're in the", "green");
-                document.body.classList.add('green-glow');
+            } else if (userInput === correctAnswer) {
+                message = 'Correct answer!';
+                // Optionally, you could add code here to handle the correct answer.
             } else {
-                displayMessage("lol that's all you got?", "red");
+                message = '';
             }
 
-            inputBox.disabled = true;
-            setTimeout(() => {
-                inputBox.disabled = false;
-            }, 5000);
-        });
-
-        function displayMessage(text, color, countdown) {
-            message.innerText = text;
-            message.classList.add('glow-text');
-            message.style.opacity = 1;
-            document.body.className = `${color}-bg`;
-
-            setTimeout(() => {
-                if (countdown) {
-                    let counter = 3;
-                    const interval = setInterval
+            messageDiv.innerHTML = message;  // Use innerHTML to allow clickable text
+            messageDiv.classList.add('fade');
+            setTimeout(() => messageDiv.classList.add('visible'), 0);  // Trigger fade-in effect
+            setTimeout(() => messageDiv.classList.remove('visible'), 3000);  // Keep message for 3 seconds
+        }
+    </script>
+</body>
+    </html>
