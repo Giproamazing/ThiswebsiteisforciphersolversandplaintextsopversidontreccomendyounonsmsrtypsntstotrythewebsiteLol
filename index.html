@@ -65,6 +65,9 @@
             text-decoration: underline;
             cursor: pointer;
         }
+        .hidden-content {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -74,56 +77,58 @@
         <div class="message" id="message"></div>
     </div>
 
-    <!-- Fake content -->
-    <div style="display:none;">
-        <!-- 70 fake input codes and answers at the beginning -->
-        <p>Fake Code 1: abc123</p>
-        <p>Fake Code 2: def456</p>
-        <p>Fake Code 3: ghi789</p>
-        <!-- Add 67 more fake codes here -->
-        <p>Fake Code 70: xyz000</p>
-
-        <!-- Hidden content with your provided text -->
-        <p>SOGXXHPAXYOXPGAZGOAXXA"-PXYXLXYXAPX"+YPXAXYPCHACYAXHPAXGLWXHPXAHPXSHXALXLHWXGLAXLGAHAXCAPYUCPACYPSXYPAXOYAXYOXAOGYXOAXPYAXYPWXYLWXYLZSYPZLGSXLHAXHLAXLHAYXAXYPAXLYAXYAXPGAXYOSJZKJSJDJSKSKJXJDKSKZJBDJSKZKJDJDJSKSHPHCOACHOGAOYXAOGXAOGGXAGXOSGXOXSGOXGOSZSOGSXGOSXOYOSXGOXSGOXSOYSXYPAXOYSXOXOGSOXOGXSGGOSXSYXGOAXGOAXOGAXPHSXHPSXPHAXPHSXOSHXSOHSLPSHCPSOYCCOHSCGOSSJSJSGIXGOSXXGOACHOSXYOSXGOSGOXSOHCSOGXGXOSXGPSGOXSGXOCSHHPSHCPSPHXSPPHCSCPHPHSC</p>
-        <!-- Repeat the text 14 more times -->
-        <p>SOGXXHPAXYOXPGAZGOAXXA"-PXYXLXYXAPX"+YPXAXYPCHACYAXHPAXGLWXHPXAHPXSHXALXLHWXGLAXLGAHAXCAPYUCPACYPSXYPAXOYAXYOXAOGYXOAXPYAXYPWXYLWXYLZSYPZLGSXLHAXHLAXLHAYXAXYPAXLYAXYAXPGAXYOSJZKJSJDJSKSKJXJDKSKZJBDJSKZKJDJDJSKSHPHCOACHOGAOYXAOGXAOGGXAGXOSGXOXSGOXGOSZSOGSXGOSXOYOSXGOXSGOXSOYSXYPAXOYSXOXOGSOXOGXSGGOSXSYXGOAXGOAXOGAXPHSXHPSXPHAXPHSXOSHXSOHSLPSHCPSOYCCOHSCGOSSJSJSGIXGOSXXGOACHOSXYOSXGOSGOXSOHCSOGXGXOSXGPSGOXSGXOCSHHPSHCPSPHXSPPHCSCPHPHSC</p>
-        <!-- Add 13 more similar lines -->
-
-        <!-- 70 fake input codes and answers at the end -->
-        <p>Fake Answer 1: qwerty123</p>
-        <p>Fake Answer 2: asdf456</p>
-        <p>Fake Answer 3: zxcv789</p>
-        <!-- Add 67 more fake answers here -->
-        <p>Fake Answer 70: poiu098</p>
-    </div>
-
     <div class="red-glow">Time is ticking, check fast</div>
+
+    <!-- Hidden content to confuse inspect element -->
+    <div class="hidden-content">
+        <!-- Random repeated strings and fake codes to obscure real logic -->
+        SOGXXHPAXYOXPGAZGOAXXA"-PXYXLXYXAPX"+YPXAXYPCHACYAXHPAXGLWXHPXAHPXSHXALXLHWXGLAXLGAHAXCAPYUCPACYPSXYPAXOYAXYOXAOGYXOAXPYAXYPWXYLWXYLZSYPZLGSXLHAXHLAXLHAYXAXYPAXLYAXYAXPGAXYOSJZKJSJDJSKSKJXJDKSKZJBDJSKZKJDJDJSKSHPHCOACHOGAOYXAOGXAOGGXAGXOSGXOXSGOXGOSZSOGSXGOSXOYOSXGOXSGOXSOYSXYPAXOYSXOXOGSOXOGXSGGOSXSYXGOAXGOAXOGAXPHSXHPSXPHAXPHSXOSHXSOHSLPSHCPSOYCCOHSCGOSSJSJSGIXGOSXXGOACHOSXYOSXGOSGOXSOHCSOGXGXOSXGPSGOXSGXOCSHHPSHCPSPHXSPPHCSCPHPHSC
+    </div>
 
     <script>
         const correctAnswer = "/#)£(£)£)lavendeWeb";
         const messageDiv = document.getElementById('message');
         let doorClickCount = 0; // Counter for 'Door' clicks
 
+        // Generate 70 fake input codes and answers
+        const fakeInputs = {
+            "fakeCode001": "Fake message 1",
+            "fakeCode002": "Fake message 2",
+            "fakeCode003": "Fake message 3",
+            // Add more fake inputs as needed up to "fakeCode070"
+            "fakeCode070": "Fake message 70"
+        };
+
+        // Real input answers and their responses
+        const realInputs = {
+            "Tufaha": "Yusuf has a chance to have a life! But failed with one mistake",
+            "jafri": "Wow what you doin here\nMay force be with you",
+            "1977": "It's scary how you really want the truth of Africa",
+            "tell me a chipher": "Okay here you go\n\nA uzwucwv lzw hsyw a owfl lg usdeau owtkalw sfv A lgdv ew wnwjqlzafy!",
+            "GitHub": "The website maker\nCool dude",
+            "Yusuf": "Go to MyBestie-(?????)",
+            "alala": "Cityi",
+            "Aasher": "Nah your not funny dude",
+            "Door": function () {
+                doorClickCount++;
+                if (doorClickCount >= 70) {
+                    return 'Here you go! Go to <span class="click-here" onclick="window.location.href=\'https://www.example.com\'">CLICK HERE</span>';
+                }
+                return `Door clicked ${doorClickCount} times`;
+            }
+        };
+
         function checkInput() {
             const userInput = document.getElementById('inputBox').value.trim();
             let message = '';
 
-            if (userInput === 'tell me a chipher') {
-                message = 'Okay here you go\n\nA uzwucwv lzw hsyw a owfl lg usdeau owtkalw sfv A lgdv ew wnwjqlzafy!';
-            } else if (userInput === 'GitHub') {
-                message = 'The website maker\nCool dude';
-            } else if (userInput === 'Yusuf') {
-                message = 'Go to MyBestie-(?????)';
-            } else if (userInput === 'alala') {
-                message = 'Cityi';
-            } else if (userInput === 'Aasher') {
-                message = 'Nah your not funny dude';
-            } else if (userInput === 'Door') {
-                doorClickCount++;
-                if (doorClickCount >= 70) {
-                    message = 'Here you go! Go to <span class="click-here" onclick="window.location.href=\'https://www.example.com\'">CLICK HERE</span>';
+            if (fakeInputs[userInput]) {
+                message = fakeInputs[userInput];
+            } else if (realInputs[userInput]) {
+                if (typeof realInputs[userInput] === "function") {
+                    message = realInputs[userInput]();  // Call the function for 'Door'
                 } else {
-                    message = `Door clicked ${doorClickCount} times`;
+                    message = realInputs[userInput];
                 }
             } else if (userInput === correctAnswer) {
                 message = 'Correct answer!';
